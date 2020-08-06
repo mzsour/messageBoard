@@ -1,11 +1,13 @@
 <?php
-define('FILENAME', './message.txt');
+define('DB_HOST', 'localhost');
+define('DB_USER', 'kazuki');
+define('DB_PASS', 'apgangan');
+define('DB_NAME', 'board');
 
 date_default_timezone_set('Asia/Tokyo');
 
 $now_date = null;
 $data = null;
-$file_handle = null;
 $split_data =null;
 $message = array();
 $message_array = array();
@@ -27,15 +29,6 @@ if(!empty($_POST['btn_submit'])){
         $clean['message'] = preg_replace('/\\r\\n|\\n|\\r/', '<br>', $clean['message']);
     }
     if(empty($error_message)){
-        /*
-        if( $file_handle = fopen( FILENAME, "a")){
-            $now_date = date("Y-m-d H:i:s");
-            $data = "'".$clean['view_name']."', '".$clean['message']."','".$now_date."'\n";
-            fwrite($file_handle, $data);
-            fclose($file_handle);
-            $success_message = "your message is successfully submitted";
-        } 
-         */
         $mysqli = new mysqli('localhost', 'kazuki', 'apgangan', 'board'); 
         if($mysqli->connect_errno){
             $error_message[] = 'failed to connect DB. errNo: '.$mysqli->connect_errno.'
@@ -58,22 +51,7 @@ if(!empty($_POST['btn_submit'])){
     } 
 }
 
-/*
-if($file_handle = fopen(FILENAME, 'r')){
-    while($data = fgets($file_handle)){
-        $split_data = preg_split('/\'/', $data);
-
-        $message = array(
-            'view_name' => $split_data[1],
-            'message' => $split_data[3],
-            'post_date' => $split_data[5]
-        );
-        array_unshift($message_array, $message);
-    }
-    fclose($file_handle);
-}
-*/
-$mysqli = new mysqli('localhost', 'kazuki', 'apgangan', 'board');
+$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 if($mysqli->connect_errno){
     $error_message[] = 'failed to read from DB. errNo:'.$mysqli->connect_errno.
