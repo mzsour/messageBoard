@@ -27,6 +27,7 @@ if(!empty($_POST['btn_submit'])){
         $clean['message'] = preg_replace('/\\r\\n|\\n|\\r/', '<br>', $clean['message']);
     }
     if(empty($error_message)){
+        /*
         if( $file_handle = fopen( FILENAME, "a")){
             $now_date = date("Y-m-d H:i:s");
             $data = "'".$clean['view_name']."', '".$clean['message']."','".$now_date."'\n";
@@ -34,9 +35,30 @@ if(!empty($_POST['btn_submit'])){
             fclose($file_handle);
             $success_message = "your message is successfully submitted";
         } 
+         */
+        $mysqli = new mysqli('localhost', 'kazuki', 'apgangan', 'board'); 
+        if($mysqli->connect_errno){
+            $error_message[] = 'failed to connect DB. errNo: '.$mysqli->connect_errno.'
+            : '.$mysqli->connect_error;
+        } else {
+            $mysqli->set_charset('utf8');
+            $now_date = date("Y-m-d H:i:s");
+            $sql = "INSERT INTO message (view_name, message, post_date) VALUES 
+                ( '$clean[view_name]', '$clean[message]', '$now_date')";
+        
+            $res = $mysqli->query($sql);
+
+            if($res){
+                $success_message='message is successfully written.';
+            } else {
+                $error_message[] = "failed to write into DB.";
+            }
+            $mysqli->close();
+        }
     } 
 }
 
+/*
 if($file_handle = fopen(FILENAME, 'r')){
     while($data = fgets($file_handle)){
         $split_data = preg_split('/\'/', $data);
@@ -49,6 +71,22 @@ if($file_handle = fopen(FILENAME, 'r')){
         array_unshift($message_array, $message);
     }
     fclose($file_handle);
+}
+*/
+$mysqli = new mysqli('localhost', 'kazuki', 'apgangan', 'board');
+
+if($mysqli->connect_errno){
+    $error_message[] = 'failed to read from DB. errNo:'.$mysqli->connect_errno.
+                        ' : '.$mysqli->connect_error;
+} else {
+    $sql = "SELECT view_name, message, post_date FROM message ORDER BY
+            post_date DESC";
+    $res = $mysqli->query($sql);
+
+    if($res){
+        $message_array = $res->fetch_all(MYSQLI_ASSOC);
+    }
+    $mysqli->close();
 }
 ?>
 
