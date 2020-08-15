@@ -11,8 +11,18 @@ $csv_data = null;
 $sql = null;
 $res = null;
 $message_array = array();
+$limit = null;
 
 session_start();
+
+// how many post to get?
+if(!empty($_GET['limit'])){
+    if($_GET['limit'] === "10"){
+        $limit = 10;
+    } elseif($_GET['limit'] ===  "30"){
+        $limit = 30;
+    }
+}
 
 if(!empty($_SESSION['admin_login']) && $_SESSION['admin_login'] === true){
     // make csv file and output it.
@@ -25,7 +35,13 @@ if(!empty($_SESSION['admin_login']) && $_SESSION['admin_login'] === true){
 
     // check connection error
     if(!$mysqli->connect_errno){
-        $sql = "SELECT * FROM message ORDER BY post_date ASC";
+        if(!empty($limit)){
+            $sql = "SELECT * FROM message ORDER BY post_date ASC
+                LIMIT $limit";
+        } else {
+            $sql = "SELECT * FROM message ORDER BY post_date ASC";
+        }
+
         $res = $mysqli->query($sql);
 
         if($res){

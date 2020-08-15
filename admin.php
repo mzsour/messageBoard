@@ -79,6 +79,11 @@ input[type="password"]{
 $_SESSION['admin_login'] === true): ?>
 
 <form method="get" action="./download.php">
+    <select name="limit">
+        <option value="">all</option>
+        <option value="10">10 posts</option>
+        <option value="30">30 posts</option>
+    </select>
     <input type="submit" name="btn_download" value="download">
 </form>
 
