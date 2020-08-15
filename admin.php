@@ -20,6 +20,10 @@ $clean = array();
 
 session_start();
 
+if(!empty($_GET['btn_logout'])){
+    unset($_SESSION['admin_login']);
+}
+
 if(!empty($_POST['btn_submit'])){
 
     if(!empty($_POST['admin_password']) && $_POST['admin_password'] 
@@ -58,6 +62,13 @@ if($mysqli->connect_errno){
 input[type="password"],
 input[type="password"]{
     width: 200px;
+}
+input[name=btn_logout]{
+    margin-top: 40px;
+    background-color: #666;
+}
+input[name=btn_logout]:hover{
+    background-color: #777;
 }
 
 
@@ -105,6 +116,10 @@ $_SESSION['admin_login'] === true): ?>
 </article>
 <?php endforeach; ?>
 <?php endif; ?>
+
+<form method="get" action="">
+    <input type="submit" name="btn_logout" value="logout">
+</form>
 
 <?php else: ?>
 <!-- login form follows -->
