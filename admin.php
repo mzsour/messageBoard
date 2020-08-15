@@ -99,7 +99,7 @@ $_SESSION['admin_login'] === true): ?>
         <p><a href="edit.php?message_id=<?php echo $value['id']; ?>">
             edit</>
         <a href="delete.php?message_id=<?php echo $value['id']; ?>">
-            dlete</a></p>
+            delete</a></p>
     </div>
     <p><?php echo nl2br($value['message']); ?></p>
 </article>
