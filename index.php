@@ -11,7 +11,6 @@ $data = null;
 $split_data =null;
 $message = array();
 $message_array = array();
-$success_message = null;
 $error_message = array();
 $clean = array();
 
@@ -45,12 +44,13 @@ if(!empty($_POST['btn_submit'])){
             $res = $mysqli->query($sql);
 
             if($res){
-                $success_message='message is successfully written.';
+                $_SESSION['success_message'] = 'message is successfully written.';
             } else {
                 $error_message[] = "failed to write into DB.";
             }
             $mysqli->close();
         }
+        header('Location: ./index.php');
     } 
 }
 
@@ -83,8 +83,10 @@ if($mysqli->connect_errno){
 
 <body>
 <h1>simple message board</h1>
-<?php if(!empty($success_message)): ?>
-    <p class="success_message"><?php echo $success_message; ?></p>
+<?php if(empty($_POST['btn_submit']) &&
+!empty($_SESSION['success_message'])): ?>
+    <p class="success_message"><?php echo $_SESSION['success_message']; ?></p>
+    <?php unset($_SESSION['success_message']); ?>
 <?php endif; ?>
 <?php if(!empty($error_message)): ?>
     <ul class="error_message">
@@ -123,6 +125,7 @@ if($mysqli->connect_errno){
 <?php endforeach; ?>
 <?php endif; ?>
 </section>
+<a href="admin.php">admin page</a>
 </body>
 
 </html>

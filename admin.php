@@ -135,6 +135,7 @@ $_SESSION['admin_login'] === true): ?>
 <?php endif; ?>
 
 </section>
+<a href="index.php">user page</a>
 </body>
 
 </html>
