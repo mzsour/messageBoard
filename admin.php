@@ -36,7 +36,7 @@ if($mysqli->connect_errno){
     $error_message[] = 'failed to read from DB. errNo:'.$mysqli->connect_errno.
                         ' : '.$mysqli->connect_error;
 } else {
-    $sql = "SELECT view_name, message, post_date FROM message ORDER BY
+    $sql = "SELECT id, view_name, message, post_date FROM message ORDER BY
             post_date DESC";
     $res = $mysqli->query($sql);
 
@@ -53,11 +53,13 @@ if($mysqli->connect_errno){
 <head>
 <meta charset="utf-8">
 <title>admin page</title>
+<link rel="stylesheet" href="style.css">
 <style>
 input[type="password"],
 input[type="password"]{
     width: 200px;
 }
+
 
 </style>
 </head>
@@ -94,8 +96,12 @@ $_SESSION['admin_login'] === true): ?>
     <div class="info">
         <h2><?php echo $value['view_name']; ?></h2>
         <time><?php echo date('Y年m月d日 H:i', strtotime($value['post_date'])); ?></time>
+        <p><a href="edit.php?message_id=<?php echo $value['id']; ?>">
+            edit</>
+        <a href="delete.php?message_id=<?php echo $value['id']; ?>">
+            dlete</a></p>
     </div>
-    <p><?php echo $value['message']; ?></p>
+    <p><?php echo nl2br($value['message']); ?></p>
 </article>
 <?php endforeach; ?>
 <?php endif; ?>
