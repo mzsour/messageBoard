@@ -15,12 +15,16 @@ $success_message = null;
 $error_message = array();
 $clean = array();
 
+session_start();
+
 if(!empty($_POST['btn_submit'])){
     if(empty($_POST['view_name'])){
         $error_message[] = 'you must enter name';
     } else {
         $clean['view_name'] = htmlspecialchars($_POST['view_name'], ENT_QUOTES);
         $clean['view_name'] = preg_replace('/\\r\\n|\\n|\\r/', '', $clean['view_name']);
+        
+        $_SESSION['view_name'] = $clean['view_name'];
     }
     if(empty($_POST['message'])){
         $error_message[] = 'you must enter message';
@@ -93,11 +97,14 @@ if($mysqli->connect_errno){
 <form method="post">
     <div>
         <label for="view_name">name</label>
-        <input id="name" type="text" name="view_name" values="">
+        <input id="name" type="text" name="view_name" value="<?php 
+            if(!empty($_SESSION['view_name'])){
+                echo $_SESSION['view_name'];
+            }?>"/>
     </div>
     <div>
         <label for="message">message</label>
-        <textarea id="message" type="text" name="message" values=""></textarea>
+        <textarea id="message" type="text" name="message" value=""></textarea>
     </div>
     <input type="submit" name="btn_submit" value="submit">
 </form>
